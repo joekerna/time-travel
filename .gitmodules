@@ -1,3 +1,6 @@
 [submodule "rsync-time-backup"]
 	path = rsync-time-backup
 	url = https://github.com/laurent22/rsync-time-backup.git
+[submodule "terminal-notifier"]
+	path = terminal-notifier
+	url = https://github.com/julienXX/terminal-notifier
