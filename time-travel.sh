@@ -5,23 +5,25 @@
 # -----------------------------------------------------------------------------
 SOURCE="$1"
 DESTINATION="$2"
+EXCLUDE_FILE="$3"
 TMPDIR=/tmp
+SCRIPTDIR=$(dirname $0)
 
 # -----------------------------------------------------------------------------
-# Create notification-center popup
+# notification-center start popup
 # -----------------------------------------------------------------------------
-./terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup started..."
+$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup started..."
 
 # -----------------------------------------------------------------------------
 # Run rsync-time-backup
 # -----------------------------------------------------------------------------
-./rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats -h" $SOURCE $DESTINATION > $TMPDIR/time-travel.log
+$SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats -h" $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
 
 # -----------------------------------------------------------------------------
-# Create notification-center popup
+# notification-center popup with summary
 # -----------------------------------------------------------------------------
 TOTALTRANSFERREDSIZE=$(grep 'Total transferred file size' $TMPDIR/time-travel.log)
-./terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
+$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
 
 # -----------------------------------------------------------------------------
 # Clean up
