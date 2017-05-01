@@ -17,13 +17,18 @@ $SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time T
 # -----------------------------------------------------------------------------
 # Run rsync-time-backup
 # -----------------------------------------------------------------------------
-$SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats -h" $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
+nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats -h" $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
 
 # -----------------------------------------------------------------------------
 # notification-center popup with summary
 # -----------------------------------------------------------------------------
 TOTALTRANSFERREDSIZE=$(grep 'Total transferred file size' $TMPDIR/time-travel.log)
-$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
+if [ -z "$TOTALTRANSFERREDSIZE" ]; then
+	# Error
+	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup was interrupted"
+else
+	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
+fi
 
 # -----------------------------------------------------------------------------
 # Clean up
