@@ -6,8 +6,12 @@ This script combines the powerful backup capabilites of rsync-time-backup with t
 # Installation
 
 	git clone https://github.com/joekerna/time-travel
+	
+	Destination directory has to contain empty file named backup.marker.
+	
+	touch <DESTINATION>/backup.marker
 
 # Usage
 
-	Usage: time-travel.sh <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]
+	time-travel.sh <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]
 
