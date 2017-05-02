@@ -17,7 +17,7 @@ $SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time T
 # -----------------------------------------------------------------------------
 # Run rsync-time-backup
 # -----------------------------------------------------------------------------
-nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --stats -h" $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
+nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
 
 # -----------------------------------------------------------------------------
 # notification-center popup with summary
