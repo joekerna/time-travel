@@ -33,4 +33,7 @@ fi
 # -----------------------------------------------------------------------------
 # Clean up
 # -----------------------------------------------------------------------------
-rm -rf $TMPDIR/time-travel.log
+if [ -z "$TOTALTRANSFERREDSIZE" ]; then
+	# Only delete log file in case of success
+	rm -rf $TMPDIR/time-travel.log
+fi
