@@ -1,39 +1,50 @@
 #!/usr/bin/env bash
 
 # -----------------------------------------------------------------------------
-# Variables
+# VARIABLES
 # -----------------------------------------------------------------------------
+EXIT_CODE="1"
 SOURCE="$1"
 DESTINATION="$2"
 EXCLUDE_FILE="$3"
 TMPDIR=/tmp
+if [[ ! -d $TMPDIR ]]; then
+	echo "Please create a temporary directory at " $TMPDIR
+	exit $EXIT_CODE
+fi
 SCRIPTDIR=$(dirname $0)
 
 # -----------------------------------------------------------------------------
-# notification-center start popup
+# NOTIFICATION-CENTER STARTUP POPUP
 # -----------------------------------------------------------------------------
 $SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup started..."
 
 # -----------------------------------------------------------------------------
-# Run rsync-time-backup
+# RUN RSYNC_TIME_BACKUP
 # -----------------------------------------------------------------------------
 nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
+# Save rsync-time-backup exit-code
+EXIT_CODE=$?
 
 # -----------------------------------------------------------------------------
-# notification-center popup with summary
+# ERROR HANDLING
 # -----------------------------------------------------------------------------
 TOTALTRANSFERREDSIZE=$(grep 'Total transferred file size' $TMPDIR/time-travel.log)
-if [ -z "$TOTALTRANSFERREDSIZE" ]; then
+if ([ -z "$TOTALTRANSFERREDSIZE" ] || [$EXIT_CODE != "0"]); then
 	# Error
 	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup was interrupted"
+	EXIT_CODE="1"
 else
 	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
+	EXIT_CODE="0"
 fi
 
 # -----------------------------------------------------------------------------
-# Clean up
+# CLEAN UP
 # -----------------------------------------------------------------------------
 if [ -z "$TOTALTRANSFERREDSIZE" ]; then
 	# Only delete log file in case of success
 	rm -rf $TMPDIR/time-travel.log
 fi
+
+exit $EXIT_CODE
