@@ -9,8 +9,8 @@ DESTINATION="$2"
 EXCLUDE_FILE="$3"
 TMPDIR=/tmp
 if [[ ! -d $TMPDIR ]]; then
-	echo "Please create a temporary directory at " $TMPDIR
-	exit $EXIT_CODE
+	TMPDIR=$(mktemp -d)
+	echo "/tmp does not exist. Creating temporary directory at " $TMPDIR
 fi
 SCRIPTDIR=$(dirname $0)
 
