@@ -16,10 +16,11 @@ This script combines the powerful backup capabilites of rsync-time-backup with t
 	time-travel.sh <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]
 
 # Backup strategy
-	Every time the script runs it creates a new backup.
-	Only modified data is transferred, all unchanged data is hard linked to the previous backup and does not use up space on the backup drive.
-	You can safely delete any backup folder by hand if you like.
-	Previous backups are eventually deleted. Based on the following strategy backups are kept
+Every time the script runs it creates a new backup. Only modified data is transferred, all unchanged data is hard linked to the previous backup and does not use up space on the backup drive.
+
+You can safely delete any backup folder by hand if you like.
+
+Previous backups are eventually deleted. Based on the following strategy backups are kept
 	
 * Within the last 24 hours: all
 * Within the last 31 days: The last of each day 
