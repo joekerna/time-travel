@@ -14,6 +14,15 @@ if [[ ! -d $TMPDIR ]]; then
 fi
 SCRIPTDIR=$(dirname $0)
 
+# Create lock file
+if [[ -f $TMPDIR/.time-travel.lock ]]; then
+	touch $TMPDIR/.time-travel.lock
+else
+	EXIT_CODE="1"
+	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Previous backup still running."
+	exit $EXIT_CODE
+fi	
+
 # -----------------------------------------------------------------------------
 # NOTIFICATION-CENTER STARTUP POPUP
 # -----------------------------------------------------------------------------
@@ -46,5 +55,6 @@ if [ -z "$TOTALTRANSFERREDSIZE" ]; then
 	# Only delete log file in case of success
 	rm -rf $TMPDIR/time-travel.log
 fi
+rm $TMPDIR/.time-travel.lock
 
 exit $EXIT_CODE
