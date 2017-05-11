@@ -15,7 +15,7 @@ fi
 SCRIPTDIR=$(dirname $0)
 
 # Create lock file
-if [[ -f $TMPDIR/.time-travel.lock ]]; then
+if [[ ! -f $TMPDIR/.time-travel.lock ]]; then
 	touch $TMPDIR/.time-travel.lock
 else
 	EXIT_CODE="1"
