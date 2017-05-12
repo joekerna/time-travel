@@ -26,4 +26,9 @@ Previous backups are eventually deleted. Based on the following strategy backups
 * Within the last 31 days: The last of each day 
 * Older than 31 days: The last of each month
 
-	
+# Screenshots
+![Backup started](/backup_started.png?raw=true "Backup started")
+
+![Backup finished](/finished.png?raw=true "Backup finished")
+
+![Notification center](/notification_center.png?raw=true "Notification center")
