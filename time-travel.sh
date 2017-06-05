@@ -31,7 +31,7 @@ $SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time T
 # -----------------------------------------------------------------------------
 # RUN RSYNC_TIME_BACKUP
 # -----------------------------------------------------------------------------
-nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
+nice -n 10 $SCRIPTDIR/rsync-time-backup/rsync_tmbackup.sh --rsync-set-flags "-D --compress --numeric-ids --links --hard-links --itemize-changes --times --recursive --perms --owner --group --stats --human-readable" $SOURCE $DESTINATION $EXCLUDE_FILE > $TMPDIR/time-travel.log
 # Save rsync-time-backup exit-code
 EXIT_CODE=$?
 
@@ -39,9 +39,9 @@ EXIT_CODE=$?
 # ERROR HANDLING
 # -----------------------------------------------------------------------------
 TOTALTRANSFERREDSIZE=$(grep 'Total transferred file size' $TMPDIR/time-travel.log)
-if ([ -z "$TOTALTRANSFERREDSIZE" ] || [$EXIT_CODE != "0"]); then
+if [[ -z "$TOTALTRANSFERREDSIZE"  || $EXIT_CODE != "0" ]]; then
 	# Error
-	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup was interrupted"
+	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "Backup was interrupted. Code: $EXIT_CODE"
 	EXIT_CODE="1"
 else
 	$SCRIPTDIR/terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Time Travel" -message "$TOTALTRANSFERREDSIZE"
